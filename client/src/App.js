@@ -4,7 +4,7 @@ import Navbar from "./components/navbar/Navbar";
 import Category from "./components/category/Category";
 import Footer from "./components/footer/Footer"
 import Categories from "./pages/categories/Categories";
-import ProductDetail from "./components/products/ProductDetail";
+import ProductDetail from "./pages/products/ProductDetail";
 
 function App() {
   return (
