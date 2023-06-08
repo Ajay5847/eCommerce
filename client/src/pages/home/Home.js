@@ -29,7 +29,7 @@ function Home() {
             All New Designs, Same Old Details.
           </p>
         </div>
-        <div className="product-content">
+        <div className="category-content">
           <Product />
           <Product />
           <Product />
