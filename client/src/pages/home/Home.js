@@ -6,6 +6,8 @@ import Product from "../../components/product/Product";
 import Footer from "../../components/footer/Footer";
 
 function Home() {
+
+  
   return (
     <div className="Home">
       <Hero />

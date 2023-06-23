@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Categories.scss";
 import Product from "../../components/product/Product";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Categories() {
+  const navigate = useNavigate();
+  const params = useParams();
+  const [categoryId, setCategoryId] = useState('');
+
+  const categoryList = [
+    {
+      id: "comics",
+      name: "Comics",
+    },
+    {
+      id: "tv-shows",
+      name: "TV Shows",
+    },
+    {
+      id: "sports",
+      name: "Sports",
+    },
+  ];
+
+  useEffect(() => {
+    setCategoryId(params.categoryId);
+    //api call
+  }, [params])
+
+  function handleEvent(e) {
+    navigate(`/category/${e.target.value}`);
+  }
   return (
     <div className="Categories">
       <div className="container">
@@ -30,18 +58,12 @@ function Categories() {
           <div className="filter-box">
             <div className="category-filter">
               <h3>Category</h3>
-              <div className="filter-radio">
-                <input name="category" type="radio" id="comics" />
-                <label htmlFor="comics">Comics</label>
-              </div>
-              <div className="filter-radio">
-                <input name="category" type="radio" id="tv-shows" />
-                <label htmlFor="tv-shows">TV Shows</label>
-              </div>
-              <div className="filter-radio">
-                <input name="category" type="radio" id="sports" />
-                <label htmlFor="sports">Sports</label>
-              </div>
+              {categoryList.map((item) => (
+                <div className="filter-radio">
+                  <input name="category" type="radio" value={item.id} id={item.id} onChange={handleEvent} checked={item.id === categoryId} />
+                  <label htmlFor={item.id}>{item.name}</label>
+                </div>
+              ))}
             </div>
           </div>
           <div className="product-box">

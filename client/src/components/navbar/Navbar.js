@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {BiCartDownload} from 'react-icons/bi'
 import './Navbar.scss'
+import Cart from '../cart/Cart'
 
 function Navbar() {
+
+  const [openCart, setOpenCart] = useState(false);
   return (
     <div className='Navbar'>
-      <div className="container nav-container">
+      <nav className="container nav-container">
         <div className="nav-left">
           <ul className='link-group'>
             <li className='hover-link'>
@@ -26,14 +29,15 @@ function Navbar() {
           </Link>
         </div>
         <div className="nav-right">
-          <div className="nav-cart hover-link">
+          <div className="nav-cart hover-link" onClick={() => setOpenCart(!openCart)}>
             <div className="icon">
               <BiCartDownload />
             </div>
             <span className='cart-count center'>99</span>
           </div>
         </div>
-      </div>
+      </nav>
+      { openCart && <Cart onClose={() => setOpenCart(false)} />}
     </div>
   )
 }
