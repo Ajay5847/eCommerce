@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Hero from "../../components/hero/Hero";
 import Category from "../../components/category/Category";
 import './Home.scss'
 import Product from "../../components/product/Product";
 import Footer from "../../components/footer/Footer";
+import { axiosClient } from "../../utils/axiosClient";
 
 function Home() {
 
+  const [categories,setCategories] = useState(null);
+  const [isTopPicks,setIsTopPicks] = useState(null);
+
+  async function fetchData(){
+    const categoryResponse = await axiosClient.get('/newcategories?populate=image');
+    const isTopPickResponse = await axiosClient.get('/products?filters[isTopPick][$eq]=true&populate=image');
+
+    setCategories(categoryResponse.data.data);
+    setIsTopPicks(isTopPickResponse.data.data);
+  }
+
+  useEffect(() => {
+    fetchData();
+  },[])
   
   return (
     <div className="Home">
@@ -19,9 +34,7 @@ function Home() {
           </p>
         </div>
         <div className="category-content">
-          <Category />
-          <Category />
-          <Category />
+          {categories?.map(category => <Category key={category.id} category={category}/>)}
         </div>
       </section>
       <section className="collection container">
@@ -32,12 +45,7 @@ function Home() {
           </p>
         </div>
         <div className="category-content">
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
+          {isTopPicks?.map(products => <Product key={products.id} products={products} />)}
         </div>
       </section>
     </div>

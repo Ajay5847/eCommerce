@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./Categories.scss";
 import Product from "../../components/product/Product";
 import { useNavigate, useParams } from "react-router-dom";
+import { axiosClient } from "../../utils/axiosClient";
 
 function Categories() {
   const navigate = useNavigate();
   const params = useParams();
   const [categoryId, setCategoryId] = useState('');
+  const [products,setProducts] = useState(null);
 
   const categoryList = [
     {
@@ -23,8 +25,16 @@ function Categories() {
     },
   ];
 
+  async function fetchData(){
+    const categoryResponse = await axiosClient.get(`/newcategories?populate=*&filters[key][$eq]=${params.categoryId}`);
+    console.log("category",categoryResponse)
+    setProducts(categoryResponse.data.data);
+  }
+
+
   useEffect(() => {
     setCategoryId(params.categoryId);
+    fetchData();
     //api call
   }, [params])
 
@@ -67,11 +77,7 @@ function Categories() {
             </div>
           </div>
           <div className="product-box">
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
+            {products?.map((products) => <Product key={products.id} products={products} />)}
           </div>
         </div>
       </div>
