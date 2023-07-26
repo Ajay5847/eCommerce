@@ -5,17 +5,15 @@ import './Home.scss'
 import Product from "../../components/product/Product";
 import Footer from "../../components/footer/Footer";
 import { axiosClient } from "../../utils/axiosClient";
+import { useSelector } from "react-redux";
 
 function Home() {
 
-  const [categories,setCategories] = useState(null);
+  const categories = useSelector((state) => state.categoryReducer.categories);
   const [isTopPicks,setIsTopPicks] = useState(null);
 
   async function fetchData(){
-    const categoryResponse = await axiosClient.get('/newcategories?populate=image');
     const isTopPickResponse = await axiosClient.get('/products?filters[isTopPick][$eq]=true&populate=image');
-
-    setCategories(categoryResponse.data.data);
     setIsTopPicks(isTopPickResponse.data.data);
   }
 

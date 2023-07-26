@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from "react";
-import "./Categories.scss";
+import "./Collection.scss";
 import Product from "../../components/product/Product";
 import { useNavigate, useParams } from "react-router-dom";
 import { axiosClient } from "../../utils/axiosClient";
+import { useSelector } from "react-redux";
 
-function Categories() {
+function Collection() {
   const navigate = useNavigate();
   const params = useParams();
   const [categoryId, setCategoryId] = useState('');
   const [products,setProducts] = useState(null);
 
-  const categoryList = [
-    {
-      id: "comics",
-      name: "Comics",
-    },
-    {
-      id: "tv-shows",
-      name: "TV Shows",
-    },
-    {
-      id: "sports",
-      name: "Sports",
-    },
-  ];
+  const categories = useSelector((state) => state.categoryReducer.categories);
 
   async function fetchData(){
-    const categoryResponse = await axiosClient.get(`/newcategories?populate=*&filters[key][$eq]=${params.categoryId}`);
+    const categoryResponse = await axiosClient.get(`/products?populate=image&filters[newcategory][key][$eq]=${params.categoryId}`);
     console.log("category",categoryResponse)
     setProducts(categoryResponse.data.data);
   }
@@ -68,10 +56,10 @@ function Categories() {
           <div className="filter-box">
             <div className="category-filter">
               <h3>Category</h3>
-              {categoryList.map((item) => (
+              {categories?.map((item) => (
                 <div className="filter-radio">
-                  <input name="category" type="radio" value={item.id} id={item.id} onChange={handleEvent} checked={item.id === categoryId} />
-                  <label htmlFor={item.id}>{item.name}</label>
+                  <input name="category" type="radio" value={item.attributes.key} id={item.id} onChange={handleEvent} checked={item.attributes.key === categoryId} />
+                  <label htmlFor={item.id}>{item.attributes.title}</label>
                 </div>
               ))}
             </div>
@@ -85,4 +73,4 @@ function Categories() {
   );
 }
 
-export default Categories;
+export default Collection;
