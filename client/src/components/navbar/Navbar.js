@@ -8,8 +8,10 @@ import { useSelector } from "react-redux";
 function Navbar() {
   const [openCart, setOpenCart] = useState(false);
   const categories = useSelector((state) => state.categoryReducer.categories);
+  const cart = useSelector(state => state.cartReducer.cart);
+  let totalItems = 0;
+  cart.forEach(item => totalItems += item.quantity);
 
-  console.log("navbar",categories);
 
   return (
     <div className="Navbar">
@@ -38,7 +40,7 @@ function Navbar() {
             <div className="icon">
               <BiCartDownload />
             </div>
-            <span className="cart-count center">99</span>
+            {totalItems > 0 && <span className="cart-count center">{totalItems}</span>}
           </div>
         </div>
       </nav>
