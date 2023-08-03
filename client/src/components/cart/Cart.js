@@ -5,27 +5,25 @@ import "./Cart.scss";
 import CartItem from "../cartItem/CartItem";
 import { useSelector } from "react-redux";
 import {axiosClient} from '../../utils/axiosClient'
-
+import { useNavigate } from "react-router-dom";
 import {loadStripe} from '@stripe/stripe-js';
+
 
 function Cart({ onClose }) {
   const cart = useSelector((state) => state.cartReducer.cart);
   let totalPrice = 0;
   cart.forEach((item) => (totalPrice += item.price * item.quantity));
   const isCartEmpty = cart.length === 0;
-
+  const navigate = useNavigate();
   async function handleCheckout() {
     try {
         const response = await axiosClient.post('/orders', {
             products: cart
         });
-
         const stripe = await loadStripe(`${process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY}`);
         const data = await stripe.redirectToCheckout({
             sessionId: response.data.stripeId
         })
-
-        console.log('stripe data', data);
 
     } catch (error) {
         console.log(error);
